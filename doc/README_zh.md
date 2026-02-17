@@ -15,7 +15,7 @@
 
 ```bash
 cd config  config即为本地安装的homeassistant的配置目录
-git clone https://github.com/ibroadlink/ha_magic_home.git
+git clone https://github.com/vrioux/ha_magic_home.git
 cd ha_magic_home
 ./install.sh /config
 ```
@@ -32,7 +32,7 @@ git checkout v1.0.0
 
 ### 方法 2: [HACS](https://hacs.xyz/)
 
-HACS > Overflow Menu > Custom repositories > Repository: https://github.com/ibroadlink/ha_magic_home.git & Category: Integration > ADD
+HACS > Overflow Menu > Custom repositories > Repository: https://github.com/vrioux/ha_magic_home.git & Category: Integration > ADD
 
 > 魔法家集成暂未添加到 HACS 商店，敬请期待。
 
