@@ -18,7 +18,7 @@ Magic Home Integration is an officially supported Home Assistant integration com
 
 ```bash
 cd config config is the configuration directory of the locally installed homeassistant.
-git clone https://github.com/ibroadlink/ha_magic_home.git
+git clone https://github.com/vrioux/ha_magic_home.git
 cd ha_magic_home
 . /install.sh /config
 ``
@@ -35,9 +35,15 @@ git checkout v1.0.0
 
 ### Method 2: [HACS](https://hacs.xyz/)
 
-HACS > Overflow Menu > Custom repositories > Repository: https://github.com/ibroadlink/ha_magic_home.git & Category: Integration > ADD
+1. Open HACS in Home Assistant
+2. Click the **Overflow Menu** (⋮) > **Custom repositories**
+3. Add repository:
+   - **Repository:** `https://github.com/vrioux/ha_magic_home`
+   - **Category:** Integration
+4. Click **ADD**
+5. Restart Home Assistant
 
-> The Wizard integration has not been added to the HACS store yet, so stay tuned.
+> Note: This is the official repository with all fixes. The integration is not yet in the HACS default store, but you can add it as a custom repository using the steps above.
 
 ### Method 3: Manually via [Samba](https://github.com/home-assistant/addons/tree/master/samba) or [FTPS](https://github.com/hassio-addons/addon-ftp) Installation
 
