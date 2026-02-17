@@ -10,7 +10,7 @@ Before you start contributing, please take a moment to read the following guidel
 
 ### Report a problem
 
-If you encounter a bug in your project, please [report the issue](https://github.com/vrioux/ha_magic_home/issues/new/) on GitHub and provide detailed information about the bug, including steps to reproduce it, debug-level logging, and when the bug appeared.
+If you encounter a bug in your project, please [report the issue](https://github.com/ibroadlink/ha_magic_home/issues/new/) on GitHub and provide detailed information about the bug, including steps to reproduce it, debug-level logging, and when the bug appeared.
 
 Integrate a [method](https://www.home-assistant.io/integrations/logger/#log-filters) for turning on debug-level logging:
 
@@ -25,7 +25,7 @@ logger: default: critical
 
 ### Suggested enhancements
 
-If you have an idea for an enhancement or new feature, feel free to [create idea](https://github.com/vrioux/ha_magic_home/discussions/new?category=ideas) in the GitHub discussion forum. We look forward to your suggestions!
+If you have an idea for an enhancement or new feature, feel free to [create idea](https://github.com/ibroadlink/ha_magic_home/discussions/new?category=ideas) in the GitHub discussion forum. We look forward to your suggestions!
 
 ### Contribute code
 
@@ -77,4 +77,4 @@ By contributing to the Project, you agree that your contribution follows the Pro
 
 ## Getting Help
 
-If you need help or have questions, ask in the GitHub [discussion forum](https://github.com/vrioux/ha_magic_home/discussions/).
+If you need help or have questions, ask in the GitHub [discussion forum](https://github.com/ibroadlink/ha_magic_home/discussions/).

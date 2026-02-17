@@ -5,8 +5,8 @@
         "@roc"
     ],
     "config_flow": true,
-    "documentation": "https://github.com/vrioux/ha_magic_home",
-    "issue_tracker": "https://github.com/vrioux/ha_magic_home/issues",
+    "documentation": "https://github.com/ibroadlink/ha_magic_home",
+    "issue_tracker": "https://github.com/ibroadlink/ha_magic_home/issues",
     "integration_type": "hub",
     "iot_class": "cloud_polling",
     "requirements": [
