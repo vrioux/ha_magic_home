@@ -124,7 +124,7 @@ async def control_req(self, prop: str, value: Any) -> int:
 
     json_data = control.json()
 
-    _LOGGER.debug(json_data)
+    _LOGGER.debug("Sending %s to device %s", action, self.device_id)
 
     url = CLOUD_SERVERS_DOMAIN[cloud_server] + CLOUD_SERVERS_PATH["control"]
     header = {}
@@ -139,11 +139,17 @@ async def control_req(self, prop: str, value: Any) -> int:
                     return -1
                 res = await response.json()
                 response = ControlResponse(**res)
-                _LOGGER.debug(res)
+                status = response.event.payload.status
+                _LOGGER.debug(
+                    "Device %s action %s returned status %s",
+                    self.device_id,
+                    action,
+                    status,
+                )
 
-                if response.event.payload.status != 0:
-                    _LOGGER.error(f"control err: {res}")
-                return response.event.payload.status
+                if status != 0:
+                    _LOGGER.error("Device control failed with status %s", status)
+                return status
 
         except aiohttp.ClientError as e:
             _LOGGER.error(f"网络请求错误: {e}")
@@ -192,9 +198,14 @@ async def report_state(self) -> tuple[ResponseModel, int]:
 
                 res = await response.json()
                 response = ResponseModel(**res)
-                if response.event.payload.status != 0:
-                    _LOGGER.error(res)
-                _LOGGER.debug(response)
+                status = response.event.payload.status
+                if status != 0:
+                    _LOGGER.error("State report failed with status %s", status)
+                _LOGGER.debug(
+                    "Device %s state report returned status %s",
+                    self.device_id,
+                    status,
+                )
                 return response, 0
 
         except aiohttp.ClientError as e:

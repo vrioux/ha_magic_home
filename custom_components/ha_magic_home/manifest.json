@@ -1,9 +1,10 @@
 {
     "domain": "ha_magic_home",
     "name": "Ha Magic Home",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "config_flow": true,
-    "documentation": "https://example.com",
+    "documentation": "https://github.com/ibroadlink/ha_magic_home",
+    "issue_tracker": "https://github.com/ibroadlink/ha_magic_home/issues",
     "requirements": [
         "pydantic"
     ],
