@@ -1,6 +1,6 @@
 # Home Assistant 魔法家集成
 
-[English](./README.md) | [简体中文](./doc/README_zh.md)
+[English](../README.md) | [简体中文](./README_zh.md)
 
 魔法家家集成是一个由博联官方提供支持的 Home Assistant 的集成组件，它可以让您在 Home Assistant 中使用集成已经支持的博联魔法家 IoT 智能设备。
 
@@ -22,19 +22,21 @@ cd ha_magic_home
 
 推荐使用此方法安装魔法家家集成。当您想要更新至特定版本时，只需要切换至相应的 Tag 。
 
-例如，更新魔法家家集成版本至 v1.0.0
+例如，更新魔法家家集成版本至 v1.1.0
 
 ```bash
 cd config/ha_magic_home
-git checkout v1.0.0
+git checkout v1.1.0
 ./install.sh /config
 ```
 
 ### 方法 2: [HACS](https://hacs.xyz/)
 
-HACS > Overflow Menu > Custom repositories > Repository: https://github.com/ibroadlink/ha_magic_home.git & Category: Integration > ADD
+1. 打开 HACS，从右上角菜单进入“自定义存储库”。
+2. 添加 `https://github.com/ibroadlink/ha_magic_home`，类别选择“集成”。
+3. 选择 **Ha Magic Home** 下载，完成后重启 Home Assistant。
 
-> 魔法家集成暂未添加到 HACS 商店，敬请期待。
+> 本集成通过 HACS 自定义存储库安装，目前尚未加入 HACS 默认商店。
 
 ### 方法 3：通过 [Samba](https://github.com/home-assistant/addons/tree/master/samba) 或 [FTPS](https://github.com/hassio-addons/addon-ftp) 手动安装
 

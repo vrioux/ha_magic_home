@@ -29,21 +29,20 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data[DOMAIN] = {}
 
     family_id = entry.data.get("family_id")
-    token = entry.data.get("access_token")
     cloud_server = entry.data.get("cloud_server")
 
-    expires_in = entry.data.get("expires_in")
-
-    async def dynamic_task():
+    async def dynamic_task(_now=None):
         """周期性任务，执行后修改下一次运行时间"""
         #refresh token
         expires_in = await refresh_token_handle(hass, entry)
 
         async_call_later(hass, timedelta(seconds=expires_in), dynamic_task)
 
+    expires_in = await refresh_token_handle(hass, entry)
     async_call_later(hass, timedelta(seconds=expires_in), dynamic_task)
+    token = entry.data.get("access_token")
 
-    _LOGGER.debug('家庭信息:%s,%s,%s',family_id,token,cloud_server)
+    _LOGGER.debug('家庭信息:%s,%s', family_id, cloud_server)
 
     await async_get_devices(hass, token, cloud_server, entry)
 
@@ -88,10 +87,13 @@ async def async_get_devices(hass: HomeAssistant, token, cloud_server,
         try:
             async with session.post(url, data=body,headers=header) as response:
                 res = await response.text()
-                _LOGGER.debug(f"discoverDev:,{res}")
                 discovery = Discovery.parse_raw(res)
+                _LOGGER.debug(
+                    "Device discovery completed with status %s",
+                    discovery.event.payload.status,
+                )
                 device_category_map = defaultdict(list)
-                for device in discovery.event.endpoints:
+                for device in discovery.event.endpoints or []:
                     device_type = device.displayCategories[0]
 
                     tmp_dev_list = device_category_map[device_type]
@@ -129,7 +131,10 @@ async def refresh_token_handle(hass: HomeAssistant, entry: ConfigEntry) -> int:
                         _LOGGER.error(f"invalid res status:{response.status}"))
 
                 response_data = await response.json()
-                _LOGGER.debug(response_data)
+                _LOGGER.debug(
+                    "Cloud token refreshed; expires in %s seconds",
+                    response_data.get("expires_in"),
+                )
 
                 if response_data["expires_in"] == 0:
                     raise ValueError(

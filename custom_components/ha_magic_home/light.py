@@ -8,15 +8,18 @@ from typing import Any
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.components.light import LightEntity
 from .iot.device_class import (Endpoint, Capability)
 
 from .iot.common import control_req
 
 from homeassistant.components.light import (
-    ATTR_BRIGHTNESS, ATTR_COLOR_TEMP_KELVIN, LightEntity, LightEntityFeature,
-    COLOR_MODE_COLOR_TEMP,
-    COLOR_MODE_RGB, COLOR_MODE_BRIGHTNESS)
+    ATTR_BRIGHTNESS,
+    ATTR_COLOR_TEMP_KELVIN,
+    ATTR_RGB_COLOR,
+    ColorMode,
+    LightEntity,
+    LightEntityFeature,
+)
 
 from .iot.const import (DOMAIN)
 
@@ -73,13 +76,27 @@ class Light(LightEntity):
                 continue
             for support in capability.properties.supported:
                 if support.name == 'colortemp':
-                    self._attr_supported_color_modes.add(COLOR_MODE_COLOR_TEMP)
+                    self._attr_supported_color_modes.add(ColorMode.COLOR_TEMP)
                     self._attr_min_color_temp_kelvin = 2700
                     self._attr_max_color_temp_kelvin = 6500
                 elif support.name == 'color':
-                    self._attr_supported_color_modes.add(COLOR_MODE_RGB)
+                    self._attr_supported_color_modes.add(ColorMode.RGB)
                 elif support.name == 'brightness':
-                    self._attr_supported_color_modes.add(COLOR_MODE_BRIGHTNESS)
+                    self._attr_supported_color_modes.add(ColorMode.BRIGHTNESS)
+
+        if len(self._attr_supported_color_modes) > 1:
+            self._attr_supported_color_modes.discard(ColorMode.BRIGHTNESS)
+        if not self._attr_supported_color_modes:
+            self._attr_supported_color_modes.add(ColorMode.ONOFF)
+
+        if ColorMode.RGB in self._attr_supported_color_modes:
+            self._attr_color_mode = ColorMode.RGB
+        elif ColorMode.COLOR_TEMP in self._attr_supported_color_modes:
+            self._attr_color_mode = ColorMode.COLOR_TEMP
+        elif ColorMode.BRIGHTNESS in self._attr_supported_color_modes:
+            self._attr_color_mode = ColorMode.BRIGHTNESS
+        else:
+            self._attr_color_mode = ColorMode.ONOFF
 
     async def async_turn_on(self, **kwargs):
         """开启设备"""
@@ -94,12 +111,28 @@ class Light(LightEntity):
         for key, value in kwargs.items():
             _LOGGER.debug(key)
             _LOGGER.debug(value)
+            if key == ColorMode.COLOR_TEMP:
+                # HA versions before 2026 may include the legacy mired value
+                # together with color_temp_kelvin. Only process Kelvin.
+                continue
+            requested_value = value
             if key == ATTR_BRIGHTNESS:
                 value = math.ceil((value / 255) * 100)
             if key == ATTR_COLOR_TEMP_KELVIN:
                 value = math.ceil((value - 2700) / (6500 - 2700) * 100)
 
-            await control_req(self, key, value)
+            prop_state = await control_req(self, key, value)
+            if prop_state != 0:
+                continue
+
+            if key == ATTR_BRIGHTNESS:
+                self._attr_brightness = requested_value
+            elif key == ATTR_COLOR_TEMP_KELVIN:
+                self._attr_color_temp_kelvin = requested_value
+                self._attr_color_mode = ColorMode.COLOR_TEMP
+            elif key == ATTR_RGB_COLOR:
+                self._attr_rgb_color = requested_value
+                self._attr_color_mode = ColorMode.RGB
 
     async def async_turn_off(self, **kwargs):
         """关闭设备"""
