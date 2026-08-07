@@ -1,14 +1,10 @@
 {
     "domain": "ha_magic_home",
-    "name": "BroadLink Magic Home",
-    "codeowners": [
-        "@roc"
-    ],
+    "name": "Ha Magic Home",
+    "version": "1.1.0",
     "config_flow": true,
     "documentation": "https://github.com/ibroadlink/ha_magic_home",
     "issue_tracker": "https://github.com/ibroadlink/ha_magic_home/issues",
-    "integration_type": "hub",
-    "iot_class": "cloud_polling",
     "requirements": [
         "pydantic>=1.10.0"
     ],

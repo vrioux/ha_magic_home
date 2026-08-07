@@ -159,7 +159,10 @@ class HaMagicHomeCustomIntegrationConfigFlow(config_entries.ConfigFlow,
                                 key='error.invalid_http_status'))
 
                     response_data = await response.json()
-                    _LOGGER.debug(response_data)
+                    _LOGGER.debug(
+                        "Authorization succeeded; token expires in %s seconds",
+                        response_data.get("expires_in"),
+                    )
 
                     if response_data["expires_in"] == 0:
                         raise ValueError(
